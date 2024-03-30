@@ -6,6 +6,7 @@ import Notification from './components/Notification'
 import userService from './services/users.js'
 import Togglable from './components/Togglable/index.jsx'
 import CreateBlog from './components/CreateBlog/index.jsx'
+import Login from './components/login/index.jsx'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -16,10 +17,9 @@ const App = () => {
 
   const [message, setMessage] = useState('')
 
-  const handleLogin = async (e) => {
-    e.preventDefault()
+  const handleLogin = async (data) => {
     try {
-      const userToLogin = await loginService.login({ username, password })
+      const userToLogin = await loginService.login(data)
       window.localStorage.setItem('loggedInUser', JSON.stringify(userToLogin))
       blogService.setToken(userToLogin.token)
       setMessage('User successfully loged in')
@@ -27,8 +27,6 @@ const App = () => {
         setMessage('')
       }, 2000)
       setUser(userToLogin)
-      setUsername('')
-      setPassword('')
     } catch (error) {
       console.log(error)
       setMessage('error Wrong username or password')
@@ -83,34 +81,11 @@ const App = () => {
   const filteredblog = blogs.filter((blog) => blog?.user?.username === user?.username)
   const sortedBlog = filteredblog.sort((a, b) => a.likes - b.likes)
   if(user === null){
-    return  <form onSubmit={handleLogin}>
+    return <div>
       <h1>Log In to Application</h1>
       {message &&  <Notification message={message}/>}
-      <label htmlFor="username">
-        <span>username </span>
-        <input
-          type='text'
-          id='username'
-          name="username"
-          value={username}
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </label>
-      <br />
-      <label htmlFor='password'>
-        <span>password </span>
-        <input
-          type="password"
-          id='password'
-          name='password'
-          onChange={({ target }) => setPassword(target.value)}
-          value={password}
-        />
-      </label>
-      <button type="submit" style={{ cursor: 'pointer' }}>
-    login
-      </button>
-    </form>
+      <Login loginData={handleLogin}/>
+    </div>
   }
   return (
     <div>
