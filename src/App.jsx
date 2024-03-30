@@ -5,6 +5,7 @@ import loginService from "./services/login";
 import Notification from "./components/Notification";
 import userService from './services/users.js'
 import Togglable from "./components/Togglable/index.jsx";
+import CreateBlog from "./components/CreateBlog/index.jsx";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -12,9 +13,7 @@ const App = () => {
   const [password, setPassword] = useState("");
   const [users, setAllUsers] = useState([])
   const [user, setUser] = useState(null);
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+
   const [message, setMessage] = useState('')
 
   const handleLogin = async (e) => {
@@ -69,21 +68,21 @@ const App = () => {
     setUser(null)
     window.localStorage.removeItem('loggedInUser')
   }
-  const createBlog = async(e) => {
-    e.preventDefault()
-    blogRef.current.toggleVisibility()
-    console.log(blogs)
-  const response = await blogService.create({title, author, url})
-  setMessage(`a new blog ${response.title} by ${response.author}`)
-  setBlogs((prev)=> prev.concat(response))
-  if(response){
-    setAuthor('')
-    setTitle('')
-    setUrl('')
-    setTimeout(() => {
-      setMessage(null)
-    }, 2000)
-  }
+  const createBlog = async(newObject) => {
+    try {
+      blogRef.current.toggleVisibility()
+      const response = await blogService.create(newObject)
+      setBlogs((prev)=> prev.concat(response))
+      if(response){
+        setMessage(`a new blog ${response.title} by ${response.author}`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 2000)
+      }
+    } catch (error) {
+      console.log(error)
+      setMessage(`error All imput field is required`)
+    }
   }
 
 const filteredblog = blogs.filter((blog)=> blog?.user?.username === user?.username)
@@ -131,25 +130,7 @@ if(user === null){
         </div>
         <div>
          <Togglable buttonLabel = 'Create new Blog' ref={blogRef}>
-         <h2>Create New</h2>
-          <form action="" onSubmit={createBlog}>
-            <label htmlFor="">
-              <span>Title </span>
-              <input type="text" onChange={(e)=> setTitle(e.target.value)} value={title}/>
-            </label>
-            <br />
-            <label htmlFor="">
-              <span>Author: </span>
-              <input type="text" onChange={(e)=> setAuthor(e.target.value)} value={author}/>
-            </label>
-            <br />
-            <label htmlFor="">
-              <span>url: </span>
-              <input type="text" onChange={(e)=> setUrl(e.target.value)} value={url}/>
-            </label>
-            <br />
-            <button type="submit"> create</button>
-          </form>
+          <CreateBlog createBlog={createBlog}/>
          </Togglable>
 
         {filteredblog.map((blog) => (
