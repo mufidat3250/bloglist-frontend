@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import Notification from "./components/Notification";
 import userService from './services/users.js'
+import Togglable from "./components/Togglable/index.jsx";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -51,7 +52,9 @@ const App = () => {
     }
     getAllBlogs()
     getAllUsers()
-  }, []);
+  }, [blogs]);
+
+  const blogRef = useRef()
 
   const getAllBlogs = async() => {
     const response = await blogService.getAllBlogs()
@@ -68,9 +71,11 @@ const App = () => {
   }
   const createBlog = async(e) => {
     e.preventDefault()
+    blogRef.current.toggleVisibility()
+    console.log(blogs)
   const response = await blogService.create({title, author, url})
   setMessage(`a new blog ${response.title} by ${response.author}`)
-  setBlogs(blogs.concat(response))
+  setBlogs((prev)=> prev.concat(response))
   if(response){
     setAuthor('')
     setTitle('')
@@ -83,7 +88,6 @@ const App = () => {
 
 const filteredblog = blogs.filter((blog)=> blog?.user?.username === user?.username)
 
-console.log(users, user)
 
 if(user === null){
   return  <form onSubmit={handleLogin}>
@@ -126,7 +130,8 @@ if(user === null){
         </div>
         </div>
         <div>
-          <h2>Create New</h2>
+         <Togglable buttonLabel = 'Create new Blog' ref={blogRef}>
+         <h2>Create New</h2>
           <form action="" onSubmit={createBlog}>
             <label htmlFor="">
               <span>Title </span>
@@ -145,6 +150,7 @@ if(user === null){
             <br />
             <button type="submit"> create</button>
           </form>
+         </Togglable>
 
         {filteredblog.map((blog) => (
             <Blog key={blog.id} blog={blog} />
