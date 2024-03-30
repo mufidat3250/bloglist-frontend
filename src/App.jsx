@@ -20,7 +20,7 @@ const App = () => {
     e.preventDefault();
     try {
         
-        const userToLogin = await loginService.login({ username, password });
+      const userToLogin = await loginService.login({ username, password });
       window.localStorage.setItem('loggedInUser', JSON.stringify(userToLogin))
       blogService.setToken(userToLogin.token)
       setMessage('User successfully loged in')
@@ -86,7 +86,8 @@ const App = () => {
   }
 
 const filteredblog = blogs.filter((blog)=> blog?.user?.username === user?.username)
-
+const sortedBlog = filteredblog.sort((a, b)=> a.likes - b.likes)
+console.log(sortedBlog)
 
 if(user === null){
   return  <form onSubmit={handleLogin}>
@@ -132,8 +133,7 @@ if(user === null){
          <Togglable buttonLabel = 'Create new Blog' ref={blogRef}>
           <CreateBlog createBlog={createBlog}/>
          </Togglable>
-
-        {filteredblog.map((blog) => (
+        {sortedBlog.map((blog) => (
             <Blog key={blog.id} blog={blog} />
           ))
           }
