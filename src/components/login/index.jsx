@@ -1,25 +1,6 @@
-import React , {useState} from "react";
-import loginService from '../../services/login'
+import React, {} from "react";
 
-const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
-  const handleLogin = async(e) => {
-    e.preventDefault()
-    console.log('submited')
-    
-
-    try {
-        const user = await loginService.login({username, password})
-    setUser(user)
-    setUsername('')
-    setPassword('')
-    } catch (error) {
-        console.log(error)
-    }
-  };
-console.log(user)
+const Login = ({handleLogin, handleChange, credentials}) => {
   return (
     <form onSubmit={handleLogin}>
       <h1>Log In to Application</h1>
@@ -29,8 +10,7 @@ console.log(user)
           type="text"
           id="username"
           name="username"
-          value={username}
-          onChange={({ target }) => setUsername(target.value)}
+          onChange={handleChange}
         />
       </label>
       <br />
@@ -40,11 +20,10 @@ console.log(user)
           type="password"
           id="password"
           password="password"
-          value={password}
-          onChange={({ target }) => setPassword(target.value)}
+          onChange={handleChange}
         />
       </label>
-      <button type="submit">login</button>
+      <button type="submit" style={{cursor:'pointer'}}>login</button>
     </form>
   );
 };
