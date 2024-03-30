@@ -19,13 +19,14 @@ const App = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-        setMessage('error Wrong username or password')
+        
         const userToLogin = await loginService.login({ username, password });
-      console.log(userToLogin);
-      const findOneUser = users.find((u)=> u.username === userToLogin?.username)
-        console.log(findOneUser)
       window.localStorage.setItem('loggedInUser', JSON.stringify(userToLogin))
       blogService.setToken(userToLogin.token)
+      setMessage('User successfully loged in')
+      setTimeout(() => {
+        setMessage('')
+      }, 2000)
       setUser(userToLogin);
       setUsername("");
       setPassword("");
@@ -33,6 +34,11 @@ const App = () => {
       
     } catch (error) {
       console.log(error);
+      setMessage('error Wrong username or password')
+      setTimeout(() => {
+        setMessage('')
+      }, 2000)
+      
     }
   };
 
@@ -82,6 +88,7 @@ console.log(users, user)
 if(user === null){
   return  <form onSubmit={handleLogin}>
   <h1>Log In to Application</h1>
+  {message &&  <Notification message={message}/>}
   <label htmlFor="username">
     <span>username </span>
     <input
