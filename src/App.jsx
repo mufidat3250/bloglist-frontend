@@ -3,18 +3,13 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
-import userService from './services/users.js'
 import Togglable from './components/Togglable/index.jsx'
 import CreateBlog from './components/CreateBlog/index.jsx'
 import Login from './components/login/index.jsx'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [users, setAllUsers] = useState([])
   const [user, setUser] = useState(null)
-
   const [message, setMessage] = useState('')
 
   const handleLogin = async (data) => {
@@ -44,7 +39,6 @@ const App = () => {
       blogService.setToken(user.token)
     }
     getAllBlogs()
-    getAllUsers()
   }, [blogs])
 
   const blogRef = useRef()
@@ -52,10 +46,6 @@ const App = () => {
   const getAllBlogs = async() => {
     const response = await blogService.getAllBlogs()
     setBlogs(response)
-  }
-  const getAllUsers = async() => {
-    const response = await userService.getAllUsers()
-    setAllUsers(response)
   }
   const handleLogOut = () => {
     setUser(null)
