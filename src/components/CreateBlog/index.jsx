@@ -14,22 +14,22 @@ const CreateBlog = ({ createBlog }) => {
   }
 
   return (
-    <div>
+    <div className='blogForm'>
       <h2>Create New</h2>
       <form action="" onSubmit={handleNewBlog}>
         <label htmlFor="">
           <span>Title </span>
-          <input type="text" onChange={(e) => setTitle(e.target.value)} value={title}/>
+          <input type="text" onChange={(e) => setTitle(e.target.value)} value={title} id='title'/>
         </label>
         <br />
         <label htmlFor="">
           <span>Author: </span>
-          <input type="text" onChange={(e) => setAuthor(e.target.value)} value={author}/>
+          <input type="text" onChange={(e) => setAuthor(e.target.value)} value={author} id='author'/>
         </label>
         <br />
         <label htmlFor="">
           <span>url: </span>
-          <input type="text" onChange={(e) => setUrl(e.target.value)} value={url}/>
+          <input type="text" onChange={(e) => setUrl(e.target.value)} value={url} id='url'/>
         </label>
         <br />
         <button type="submit"> create</button>

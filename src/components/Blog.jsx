@@ -1,45 +1,32 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, deleteHandler, likesHandler }) => {
   const [visible, setVisible] = useState(false)
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
-
-  const deleteStyle = {
-    backgroundColor: 'blue',
-    borderRadius:'8px',
-    color:'white',
-    padding:'0.4rem',
-    cursor:'pointer'
-  }
-
-  const LikesIcrement = async() => {
-    // await blogServic
+  const  toggleVisibility = () => {
+    setVisible(!visible)
   }
 
   const deleteBlog = async() => {
 
     if( window.confirm(`Remove blog you are not gonna need it! by ${blog.author}`)){
-      await blogService.deleteBlog(blog.id)
+      await deleteHandler(blog.id)
     }
   }
+  const likeBlogPost = () => {
+    likesHandler({ ...blog, likes: blog.likes + 1 }, blog.id)
+  }
 
-  return <div style={blogStyle}>
-    <span>{blog.title} <button onClick={() => setVisible(!visible)}>{ visible ? 'View' : 'Hide'}</button></span>
+  return <div className='blog'>
+    <span>{blog.title} <span>{blog.author}</span>
+      <button onClick={toggleVisibility}>{ visible ? 'Hide' : 'View'}</button></span>
     {visible && <div>
       <br />
       <a href="#">{blog.url}</a>
       <br />
-      <span>likes: {blog.likes}</span>
-      <span>{blog.author}</span>
+      <span>likes: {blog.likes} <button onClick={likeBlogPost}>like</button></span>
       <br />
-      <button style={deleteStyle} onClick={deleteBlog}>remove</button>
+      <button className='delete-blog' onClick={deleteBlog}>remove</button>
     </div> }
   </div>
 }

@@ -1,0 +1,14 @@
+.blog{
+    padding-top: 10;
+    padding-left: 2;
+    border: 'solid';
+    border-width: 1;
+    margin-bottom: 5;
+}
+.delete-blog{
+    background-color: blue;
+    border-radius: 8px;
+    color: white;
+    padding: '0.4rem';
+    cursor: pointer;
+}

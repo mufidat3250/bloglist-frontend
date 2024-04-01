@@ -39,7 +39,7 @@ const App = () => {
       blogService.setToken(user.token)
     }
     getAllBlogs()
-  }, [blogs])
+  }, [])
 
   const blogRef = useRef()
 
@@ -55,8 +55,10 @@ const App = () => {
     try {
       blogRef.current.toggleVisibility()
       const response = await blogService.create(newObject)
-      setBlogs((prev) => prev.concat(response))
+      console.log({ response })
       if(response){
+        setBlogs((prev) => prev.concat(response))
+        getAllBlogs()
         setMessage(`a new blog ${response.title} by ${response.author}`)
         setTimeout(() => {
           setMessage(null)
@@ -64,8 +66,32 @@ const App = () => {
       }
     } catch (error) {
       console.log(error)
-      setMessage('error All imput field is required')
+      setMessage('error Bad Request')
+      setTimeout(() => {
+        setMessage(null)
+      }, 2000)
     }
+  }
+
+  const updateBlog = async(blogObject, id) => {
+    try {
+      const response = await blogService.update(blogObject, id)
+      getAllBlogs()
+      if(response) {
+        setMessage('likes increased')
+        setTimeout(() => {
+          setMessage(null)
+        }, 2000)
+      }
+    } catch (error) {
+      console.log(error)
+      setMessage('error : update not successfull')
+    }
+  }
+
+  const removeBlog = async(id) => {
+    await blogService.deleteBlog(id)
+    getAllBlogs()
   }
 
   const filteredblog = blogs.filter((blog) => blog?.user?.username === user?.username)
@@ -92,7 +118,7 @@ const App = () => {
           <CreateBlog createBlog={createBlog}/>
         </Togglable>
         {sortedBlog.map((blog) => (
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} likeshandler= {updateBlog} deleteHandler={removeBlog} />
         ))
         }
       </div>
