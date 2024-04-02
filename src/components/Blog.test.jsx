@@ -1,7 +1,6 @@
 import { getByText, render, screen } from '@testing-library/react'
 import Blog from './Blog'
 import userEvent from '@testing-library/user-event'
-import blogs from '../services/blogs'
 import { expect } from 'vitest'
 import CreateBlog from './CreateBlog'
 

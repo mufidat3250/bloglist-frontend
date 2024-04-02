@@ -20,6 +20,7 @@ const Login = ({ loginData }) => {
           name="username"
           value={username}
           onChange={({ target }) => setUsername(target.value)}
+          data-testid = 'username'
         />
       </label>
       <br />
@@ -31,6 +32,7 @@ const Login = ({ loginData }) => {
           name='password'
           onChange={({ target }) => setPassword(target.value)}
           value={password}
+          data-testid = 'password'
         />
       </label>
       <button type="submit" style={{ cursor: 'pointer' }}>

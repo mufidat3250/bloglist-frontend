@@ -7,7 +7,7 @@
 }
 .delete-blog{
     background-color: blue;
-    border-radius: 8px;
+    border-radius: '8px';
     color: white;
     padding: '0.4rem';
     cursor: pointer;
