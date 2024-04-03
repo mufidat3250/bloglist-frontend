@@ -2,6 +2,7 @@ import { useState } from 'react'
 import blogService from '../services/blogs'
 
 const Blog = ({ blog, deleteHandler, likesHandler }) => {
+  console.log(typeof likesHandler)
   const [visible, setVisible] = useState(false)
   const  toggleVisibility = () => {
     setVisible(!visible)
@@ -13,8 +14,9 @@ const Blog = ({ blog, deleteHandler, likesHandler }) => {
       await deleteHandler(blog.id)
     }
   }
-  const likeBlogPost = () => {
-    likesHandler({ ...blog, likes: blog.likes + 1 }, blog.id)
+  const likeBlogPost = async() => {
+    const updateBlog = { ...blog, likes: ( blog.likes + 1 ) }
+    await likesHandler(updateBlog, blog.id)
   }
 
   return <div className='blog'>
@@ -24,7 +26,7 @@ const Blog = ({ blog, deleteHandler, likesHandler }) => {
       <br />
       <a href="#">{blog.url}</a>
       <br />
-      <span>likes: {blog.likes} <button onClick={likeBlogPost}>like</button></span>
+      <p> <span className='likes'>likes:{blog.likes}</span> <button onClick={likeBlogPost}>like</button></p>
       <br />
       <button className='delete-blog' onClick={deleteBlog}>remove</button>
     </div> }

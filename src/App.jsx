@@ -76,7 +76,8 @@ const App = () => {
   const updateBlog = async(blogObject, id) => {
     try {
       const response = await blogService.update(blogObject, id)
-      getAllBlogs()
+      const updatedBlogs = blogs.map((blog) => blog.id === id ? blogObject : blog)
+      setBlogs(updatedBlogs)
       if(response) {
         setMessage('likes increased')
         setTimeout(() => {
@@ -118,7 +119,7 @@ const App = () => {
           <CreateBlog createBlog={createBlog}/>
         </Togglable>
         {sortedBlog.map((blog) => (
-          <Blog key={blog.id} blog={blog} likeshandler= {updateBlog} deleteHandler={removeBlog} />
+          <Blog key={blog.id} blog={blog} likesHandler= {updateBlog} deleteHandler={removeBlog} />
         ))
         }
       </div>
