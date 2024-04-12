@@ -1,25 +1,25 @@
 import React, { useState } from 'react'
+import { useField } from '../../../hooks/useField'
 
 const Login = ({ loginData }) => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const username = useField('text')
+  const password = useField('text')
+
 
   const handleLogin = (e) => {
     e.preventDefault()
-    loginData({ username, password })
-    setPassword('')
-    setUsername('')
+    loginData({ username:username.value, password:password.value })
+    username.reset()
+    password.reset()
   }
+  console.log({ username, password })
   return (
     <form onSubmit={handleLogin}>
       <label htmlFor="username">
         <span>username </span>
         <input
-          type='text'
+          {...username}
           id='username'
-          name="username"
-          value={username}
-          onChange={({ target }) => setUsername(target.value)}
           data-testid = 'username'
         />
       </label>
@@ -27,11 +27,8 @@ const Login = ({ loginData }) => {
       <label htmlFor='password'>
         <span>password </span>
         <input
-          type="password"
           id='password'
-          name='password'
-          onChange={({ target }) => setPassword(target.value)}
-          value={password}
+          {...password}
           data-testid = 'password'
         />
       </label>

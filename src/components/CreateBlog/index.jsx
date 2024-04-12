@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useField } from '../../../hooks/useField'
 
 const CreateBlog = ({ createBlog }) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+  const title = useField('text')
+  const author = useField('text')
+  const url = useField('text')
 
   const handleNewBlog = (event) => {
     event.preventDefault()
-    createBlog({ title, author, url })
-    setAuthor('')
-    setUrl('')
-    setTitle('')
+    createBlog({ title: title.value, author: author.value, url: url.value })
+    title.reset()
+    author.reset()
+    url.reset()
   }
 
   return (
@@ -19,17 +21,17 @@ const CreateBlog = ({ createBlog }) => {
       <form action="" onSubmit={handleNewBlog}>
         <label htmlFor="">
           <span>Title </span>
-          <input type="text" onChange={(e) => setTitle(e.target.value)} value={title} id='title' data-testid='title'/>
+          <input  {...title} id='title' data-testid='title'/>
         </label>
         <br />
         <label htmlFor="">
           <span>Author: </span>
-          <input type="text" onChange={(e) => setAuthor(e.target.value)} value={author} id='author' data-testid ='author'/>
+          <input {...author} id='author' data-testid ='author'/>
         </label>
         <br />
         <label htmlFor="">
           <span>url: </span>
-          <input type="text" onChange={(e) => setUrl(e.target.value)} value={url} id='url' data-testid = 'url'/>
+          <input  {...url} id='url' data-testid = 'url'/>
         </label>
         <br />
         <button type="submit"> create</button>

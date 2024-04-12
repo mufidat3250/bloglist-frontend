@@ -2,7 +2,7 @@ import { useState } from 'react'
 import blogService from '../services/blogs'
 
 const Blog = ({ blog, deleteHandler, likesHandler }) => {
-  console.log(typeof likesHandler)
+
   const [visible, setVisible] = useState(false)
   const  toggleVisibility = () => {
     setVisible(!visible)

@@ -14,8 +14,6 @@ const getAllBlogs = async() => {
   return  response.data
 }
 
-
-console.log({ token })
 const create = async(newObject) => {
   const config = {
     headers:{ Authorization : token }
