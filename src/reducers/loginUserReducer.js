@@ -3,7 +3,7 @@ import loginService from '../services/login'
 
 const initialState = null
 
-const userStoragekey = 'loggedInUser'
+const userStorageKey = 'loggedInUser'
 const loginSlice = createSlice({
   name:'loggedInUser',
   initialState,
@@ -12,11 +12,15 @@ const loginSlice = createSlice({
       return action.payload
     },
     loadFromLocalStorage (state, action){
-      const loggedUserJSON = window.localStorage.getItem('loggedInUser')
+      const loggedUserJSON = window.localStorage.getItem(userStorageKey)
       if(loggedUserJSON){
         const user = JSON.parse(loggedUserJSON)
         return user
       }
+    },
+    clearUserToken (state, action) {
+      window.localStorage.removeItem(userStorageKey)
+      return null
     }
   }
 })
@@ -26,15 +30,21 @@ export const login = (data) => {
     try {
       const userToLogin = await loginService.login({ ...data })
       if(userToLogin){
-        window.localStorage.setItem(userStoragekey, JSON.stringify(userToLogin))
-        dispatch(setUserToken(userToLogin.token))
+        window.localStorage.setItem(userStorageKey, JSON.stringify(userToLogin))
+        dispatch(setUserToken(userToLogin))
       }
     } catch (error){
       console.log('error')
     }
   }
 }
+export const logOut = () => {
+  return async (dispatch) => {
+    window.localStorage.removeItem(userStorageKey)
+    dispatch(clearUserToken())
+  }
+}
 
-export const { setUserToken, loadFromLocalStorage } = loginSlice.actions
+export const { setUserToken, loadFromLocalStorage, clearUserToken } = loginSlice.actions
 
 export default loginSlice.reducer

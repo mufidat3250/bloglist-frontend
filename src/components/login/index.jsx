@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useField } from '../../../hooks/useField'
+import { useField } from '../../hooks/useField'
 
 const Login = ({ loginData }) => {
   const username = useField('text')
@@ -9,10 +9,9 @@ const Login = ({ loginData }) => {
   const handleLogin = (e) => {
     e.preventDefault()
     loginData({ username:username.value, password:password.value })
-    username.reset()
-    password.reset()
+    username.onReset()
+    password.onReset()
   }
-  console.log({ username, password })
   return (
     <form onSubmit={handleLogin}>
       <label htmlFor="username">

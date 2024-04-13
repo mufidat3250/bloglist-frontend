@@ -5,12 +5,12 @@ export const useField = (type) => {
   const onChange = (e) => {
     setValue(e.target.value)
   }
-  const reset = () => setValue('')
+  const onReset = () => setValue('')
 
   return {
     value,
     onChange,
     type,
-    reset
+    onReset
   }
 }

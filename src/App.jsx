@@ -9,27 +9,24 @@ import Login from './components/login/index.jsx'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer.js'
 import { initialBlogs, createNewBlog, voteIncrease } from './reducers/blogReducer.js'
-import { loadFromLocalStorage } from './reducers/loginReducer.js'
+import { loadFromLocalStorage, logOut } from './reducers/loginUserReducer.js'
+import { login } from './reducers/loginUserReducer.js'
 
 
 
 const App = () => {
-  const [user, setUser] = useState(null)
   const dispatch = useDispatch()
   const blogList = useSelector((state ) => state.blogs)
   const copiedBlogList = [...blogList]
-
+  const userToLogin = useSelector((state ) => state.loggedInUser)
   const handleLogin = async (data) => {
     try {
-      const userToLogin = await loginService.login(data)
-      window.localStorage.setItem('loggedInUser', JSON.stringify(userToLogin))
-      blogService.setToken(userToLogin.token)
-      // dispatch(login(data))
+      dispatch(login(data))
+      blogService.setToken(userToLogin?.token)
       dispatch(setNotification('User successfully logged in'))
       setTimeout(() => {
         dispatch(setNotification(''))
       }, 2000)
-      setUser(userToLogin)
     } catch (error) {
       console.log(error)
       dispatch(setNotification('error Wrong username or password'))
@@ -38,15 +35,10 @@ const App = () => {
       }, 2000)
     }
   }
-
   useEffect(() => {
-    // const loggedUserJSON = window.localStorage.getItem('loggedInUser')
-    // if(loggedUserJSON){
-    //   const user = JSON.parse(loggedUserJSON)
-    //   setUser(user)
-    //   blogService.setToken(user.token)
-    // }
+    dispatch(loadFromLocalStorage())
     dispatch(initialBlogs())
+
   }, [])
   useEffect(() => {
     dispatch(loadFromLocalStorage())
@@ -55,8 +47,7 @@ const App = () => {
   const blogRef = useRef()
 
   const handleLogOut = () => {
-    setUser(null)
-    window.localStorage.removeItem('loggedInUser')
+    dispatch(logOut())
   }
   const createBlog = async(newObject) => {
     try {
@@ -96,9 +87,9 @@ const App = () => {
     dispatch(initialBlogs())
   }
 
-  const filteredblog = copiedBlogList.filter((blog) => blog?.user?.username === user?.username)
+  const filteredblog = copiedBlogList.filter((blog) => blog?.user?.username === userToLogin?.username)
   const sortedBlog = filteredblog.sort((a, b) => a.likes - b.likes)
-  if(user === null){
+  if(userToLogin === null){
     return <div>
       <h1>Log In to Application</h1>
       <Notification/>
@@ -111,7 +102,7 @@ const App = () => {
       <div>
         <h3>Blog</h3>
         <div>
-          <span> <strong>{user.name}</strong> is logged In</span>
+          <span> <strong>{userToLogin.name}</strong> is logged In</span>
           <button onClick={handleLogOut} style={{ cursor:'pointer' }}>LogOut</button>
         </div>
       </div>

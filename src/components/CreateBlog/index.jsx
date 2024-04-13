@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useField } from '../../../hooks/useField'
+import { useField } from '../../hooks/useField'
 
 const CreateBlog = ({ createBlog }) => {
   const title = useField('text')
@@ -10,9 +10,9 @@ const CreateBlog = ({ createBlog }) => {
   const handleNewBlog = (event) => {
     event.preventDefault()
     createBlog({ title: title.value, author: author.value, url: url.value })
-    title.reset()
-    author.reset()
-    url.reset()
+    title.onReset()
+    author.onReset()
+    url.onReset()
   }
 
   return (
