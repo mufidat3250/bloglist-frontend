@@ -12,6 +12,8 @@ import Users, { User } from './components/Users.jsx'
 import { Routes, Route } from 'react-router-dom'
 import { useMatch } from 'react-router-dom'
 import  userService  from './services/users.js'
+import Blog from './components/Blog.jsx'
+import { Link } from 'react-router-dom'
 
 
 const App = () => {
@@ -20,14 +22,17 @@ const App = () => {
   const copiedBlogList = [...blogList]
   const userToLogin = useSelector((state ) => state.loggedInUser)
   const [users, setUsers] = useState([])
-  const match = useMatch('/users/:id')
+  const userMatch = useMatch('/users/:id')
+  const blogMatch = useMatch('/blogs/:id')
 
   useEffect(() => {
     userService.getAllUsers().then((res) => setUsers(res))
   },[])
-  console.log({ users })
-  const user = match ? users.find((user ) => user.id === match.params.id ) : null
-  console.log(user)
+  console.log({ blogMatch })
+  const user = userMatch ? users.find((user ) => user.id === userMatch.params.id ) : null
+  const blog = blogMatch ? blogList.find((blog) => blog.id === blogMatch.params.id) : null
+
+  console.log({ blog })
   const handleLogin = async (data) => {
     try {
       dispatch(login(data))
@@ -74,12 +79,15 @@ const App = () => {
       <div>
         <h3>Blog</h3>
         <div>
+          <Link to={'/blogs'}>Blogs</Link>
+          <Link to={'/users'}>Users</Link>
           <span> <strong>{userToLogin.name}</strong> is logged In</span>
           <button onClick={handleLogOut} style={{ cursor:'pointer' }}>LogOut</button>
         </div>
       </div>
       <Routes>
         <Route path='/blogs' element={<Blogs sortedBlog={sortedBlog} blogRef={blogRef}/>}/>
+        <Route path='/blogs/:id' element={<Blog blog={blog}/>}/>
         <Route path='/users' element={<Users/>}/>
         <Route path='/users/:id' element={ <User user={user}/> }/>
       </Routes>

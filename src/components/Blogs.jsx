@@ -6,6 +6,7 @@ import { createNewBlog, initialBlogs, voteIncrease } from '../reducers/blogReduc
 import { setNotification } from '../reducers/notificationReducer'
 import Blog from './Blog'
 import blogService from '../services/blogs'
+import { Link } from 'react-router-dom'
 
 const Blogs = ({ blogRef, sortedBlog }) => {
   const dispatch = useDispatch()
@@ -42,19 +43,17 @@ const Blogs = ({ blogRef, sortedBlog }) => {
     }
   }
 
-  const removeBlog = async(id) => {
-    await blogService.deleteBlog(id)
-    dispatch(initialBlogs())
-  }
-
   return (
     <div>
       <div>
         <Togglable buttonLabel = 'Create new Blog' ref={blogRef}>
           <CreateBlog createBlog={createBlog}/>
         </Togglable>
-        {sortedBlog.map((blog) => (
-          <Blog key={blog.id} blog={blog} likesHandler= {updateBlog} deleteHandler={removeBlog} />
+        {sortedBlog.map((blog, index) => (
+          <div key={index}>
+            <Link to={`/blogs/${blog.id}`} >{blog.title}</Link>
+            <br />
+          </div>
         ))
         }
       </div>
@@ -63,3 +62,5 @@ const Blogs = ({ blogRef, sortedBlog }) => {
 }
 
 export default Blogs
+
+{/* <Blog key={blog.id} blog={blog} likesHandler= {updateBlog} deleteHandler={removeBlog}/> */}
