@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import loginService from '../services/login'
+import blogService from '../services/blogs'
+import { setNotification } from './notificationReducer'
 
 const initialState = null
 
@@ -25,19 +27,29 @@ const loginSlice = createSlice({
   }
 })
 
-export const login = (data) => {
+export const login = (username, password) => {
   return async(dispatch) => {
     try {
-      const userToLogin = await loginService.login({ ...data })
+      const userToLogin = await loginService.login({ username, password })
       if(userToLogin){
         window.localStorage.setItem(userStorageKey, JSON.stringify(userToLogin))
+        blogService.setToken(userToLogin.token)
         dispatch(setUserToken(userToLogin))
+        dispatch(setNotification('User successfully logged in'))
+        setTimeout(() => {
+          dispatch(setNotification(''))
+        }, 2000)
       }
     } catch (error){
-      console.log('error')
+      console.log(error,'error')
+      dispatch(setNotification('error Wrong username or password'))
+      setTimeout(() => {
+        dispatch(setNotification(''))
+      }, 2000)
     }
   }
 }
+
 export const logOut = () => {
   return async (dispatch) => {
     window.localStorage.removeItem(userStorageKey)

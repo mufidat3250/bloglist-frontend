@@ -1,4 +1,4 @@
-import { createSlice, current } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import BlogService from '../services/blogs'
 
 const blogSlice = createSlice({
@@ -31,6 +31,7 @@ export const createNewBlog = (blog) => {
   return async (dispatch) => {
     const newBlog = await BlogService.create(blog)
     dispatch(appendBlog(newBlog))
+    dispatch(initialBlogs())
   }
 }
 
@@ -38,6 +39,7 @@ export const voteIncrease = (updateObject, id) => {
   return async (dispatch) => {
     const updateblog = await BlogService.update(updateObject, id)
     dispatch(updateVote({ id:id, updateblog }))
+    dispatch(initialBlogs())
   }
 }
 export default blogSlice.reducer

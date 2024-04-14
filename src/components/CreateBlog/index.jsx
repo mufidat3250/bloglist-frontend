@@ -1,6 +1,22 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useField } from '../../hooks/useField'
+import Styled from 'styled-components'
+import { TextField, Button } from '@mui/material'
+
+const FormContainer = Styled.div`
+  width:50%;
+
+`
+const Form = Styled.form`
+  display:flex;
+  flex-direction: column;
+  gap:1rem;
+`
+const Title = Styled.h1`
+  text-align: center;
+`
+
 
 const CreateBlog = ({ createBlog }) => {
   const title = useField('text')
@@ -16,27 +32,15 @@ const CreateBlog = ({ createBlog }) => {
   }
 
   return (
-    <div className='blogForm'>
-      <h2>Create New</h2>
-      <form action="" onSubmit={handleNewBlog}>
-        <label htmlFor="">
-          <span>Title </span>
-          <input  {...title} id='title' data-testid='title'/>
-        </label>
-        <br />
-        <label htmlFor="">
-          <span>Author: </span>
-          <input {...author} id='author' data-testid ='author'/>
-        </label>
-        <br />
-        <label htmlFor="">
-          <span>url: </span>
-          <input  {...url} id='url' data-testid = 'url'/>
-        </label>
-        <br />
-        <button type="submit"> create</button>
-      </form>
-    </div>
+    <FormContainer className='blogForm'>
+      <Title>Create New</Title>
+      <Form action="" onSubmit={handleNewBlog}>
+        <TextField  {...title} id='title' data-testid='title' label='Title'/>
+        <TextField {...author} id='author' data-testid ='author' label='Author'/>
+        <TextField   {...url} id='url' data-testid = 'url' label='Url'/>
+        <Button color='primary' variant='contained' type="submit"> Create</Button>
+      </Form>
+    </FormContainer>
   )
 }
 
