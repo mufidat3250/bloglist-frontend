@@ -34,6 +34,7 @@ export const login = (username, password) => {
       if(userToLogin){
         window.localStorage.setItem(userStorageKey, JSON.stringify(userToLogin))
         blogService.setToken(userToLogin.token)
+        console.log({ userToLogin })
         dispatch(setUserToken(userToLogin))
         dispatch(setNotification('User successfully logged in'))
         setTimeout(() => {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import userService from '../services/users'
 import users from '../services/users'
 import { Link, useMatch } from 'react-router-dom'
+import { Table, TableContainer, TableBody, TableHead, Paper, TableRow, TableCell } from '@mui/material'
 
 
 const Users = () => {
@@ -9,27 +10,29 @@ const Users = () => {
   useEffect(() => {
     userService.getAllUsers().then((res) => setUsers(res))
   },[])
-  console.log({ users })
+
 
   return (
     <>
       <h2>Users</h2>
-      <table>
-        <thead>
-          <tr>
-            <td></td>
-            <th>blogs Created</th>
-          </tr>
-        </thead>
-        {users.map((user, index) => {
-          return <tbody key={index}>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
             <tr>
-              <td><Link to={`/users/${user.id}`}>{user.name}</Link></td>
-              <td>{user.blogs.length}</td>
+              <td></td>
+              <th>blogs Created</th>
             </tr>
-          </tbody>
-        })}
-      </table>
+          </TableHead>
+          {users.map((user, index) => {
+            return <TableBody key={index}>
+              <TableRow>
+                <TableCell><Link to={`/users/${user.id}`}>{user.name}</Link></TableCell>
+                <TableCell>{user.blogs.length}</TableCell>
+              </TableRow>
+            </TableBody>
+          })}
+        </Table>
+      </TableContainer>
     </>
   )
 }

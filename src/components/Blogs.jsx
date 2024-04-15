@@ -6,10 +6,23 @@ import { useDispatch } from 'react-redux'
 import { createNewBlog, initialBlogs } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { useSelector } from 'react-redux'
+import Styled from 'styled-components'
 
-const Blogs = ({ sortedBlog, blogRef }) => {
+const BlogsContainer = Styled.div`
+display:flex;
+flex-direction:column;
+gap:0.6rem;
+margin-top: 1rem;
+`
+const BlogWrapper = Styled.div`
+border:1px solid black;
+padding: 0.5rem;
+`
+
+const Blogs = ({ blogRef }) => {
   const dispatch = useDispatch()
-  const user = useSelector((state) => state.loggedInUser)
+  const blogList = useSelector((state) => state.blogs.blogs)[0]
+
   const createBlog = async (newObject) => {
     try {
       blogRef.current.toggleVisibility()
@@ -36,15 +49,15 @@ const Blogs = ({ sortedBlog, blogRef }) => {
       <Togglable buttonLabel='Create new Blog' ref={blogRef}>
         <CreateBlog createBlog={createBlog} />
       </Togglable>
-      <div>
-        {sortedBlog.map((blog, index) => (
-          <div key={index}>
+      <BlogsContainer>
+        {blogList?.map((blog, index) => (
+          <BlogWrapper key={index}>
             <Link to={`/blogs/${blog.id}`} >{blog.title}</Link>
             <br />
-          </div>
+          </BlogWrapper>
         ))
         }
-      </div>
+      </BlogsContainer>
     </div>
   )
 }

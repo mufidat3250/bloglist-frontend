@@ -1,6 +1,23 @@
 import  React, { useState, forwardRef, useImperativeHandle } from 'react'
 import PropTypes from 'prop-types'
-import { Button } from '@mui/material'
+import Styled from 'styled-components'
+
+const Button = Styled.button`
+  padding:1rem;
+  background: gray;
+  border-radius:8px;
+  color:white;
+  font-weight:bold;
+  outline:none;
+  border:none;
+  cursor:pointer;
+  margin-top:1rem;
+`
+const ChildrenWrapper = Styled.div`
+margin-top:5rem;
+margin-bottom: 2rem;
+`
+
 
 const Togglable = forwardRef((props, refs) => {
   const [visible, setVisible] = useState(false)
@@ -18,12 +35,12 @@ const Togglable = forwardRef((props, refs) => {
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>{props.buttonLabel}</button>
+        <Button onClick={toggleVisibility}>{props.buttonLabel}</Button>
       </div>
-      <div style={showWhenVisible}>
+      <ChildrenWrapper style={showWhenVisible}>
         {props.children}
-        <Button variant='Contained' color='primary' onClick={toggleVisibility}>cancel </Button>
-      </div>
+        <Button   onClick={toggleVisibility}>cancel </Button>
+      </ChildrenWrapper>
     </div>
   )
 }

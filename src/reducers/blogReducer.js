@@ -1,21 +1,26 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, current } from '@reduxjs/toolkit'
 import BlogService from '../services/blogs'
 
+const initialState = {
+  blogs:[],
+  Comments:[]
+}
+
 const blogSlice = createSlice({
-  name:'blog',
-  initialState:[],
+  name:'blogs',
+  initialState,
   reducers:{
     setBlogs(state, action) {
-      return action.payload
+      state.blogs.push(action.payload)
     },
     appendBlog (state, action) {
-      state.push(action.payload)
+      state.blogs.push(action.payload)
     },
     updateVote (state, action) {
       const id = action.payload.id
       const obj = action.payload.updateblog
-      return state.map((blog ) => blog.id === id ? obj: blog)
-    }
+      return state.blogs.map((blog ) => blog.id === id ? obj: blog)
+    },
   }
 })
 
@@ -42,4 +47,5 @@ export const voteIncrease = (updateObject, id) => {
     dispatch(initialBlogs())
   }
 }
+
 export default blogSlice.reducer
